@@ -49,15 +49,18 @@ try {
     .digest("hex");
 
   const cache = await getCache();
+  const forceNew = process.argv.includes("--force");
   let result;
 
-  if (cache[cacheKey]) {
+  if (cache[cacheKey] && !forceNew) {
     console.log("Cache hit! Using cached result.");
     result = cache[cacheKey];
   } else {
-    console.log("Cache miss. Calling API...");
+    if (forceNew) console.log("Force flag detected. Bypassing cache...");
+    else console.log("Cache miss. Calling API...");
+
     result = await higgsfield.subscribe(model, params);
-    cache[cacheKey] = result;
+    cache[cacheKey] = result; // This overwrites the old cache entry if it existed
     await saveCache(cache);
   }
 
