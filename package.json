@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "tsx index.ts",
+    "start": "tsx --env-file-if-exists=.env.local --env-file-if-exists=.env index.ts",
+    "test": "tsx --test",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@higgsfield/client": "latest",
-    "dotenv": "latest"
+    "@higgsfield/client": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
