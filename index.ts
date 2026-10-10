@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { config, higgsfield } from "@higgsfield/client/v2";
 
 const credentials = process.env.HF_CREDENTIALS;
