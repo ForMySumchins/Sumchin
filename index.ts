@@ -3,16 +3,13 @@ import { config, higgsfield } from "@higgsfield/client/v2";
 
 const credentials = process.env.HF_CREDENTIALS;
 if (!credentials) {
-  console.error("❌ Error: HF_CREDENTIALS is not configured.");
-  console.error("   Please add it to your .env.local file. (Never commit this file)");
+  console.error("HF_CREDENTIALS is not configured. Add it to .env.local locally; never commit it.");
   process.exit(1);
 }
 
 config({ credentials });
 
 try {
-  console.log("⏳ Starting generation (this usually takes 2-3 minutes)...");
-
   const result = await higgsfield.subscribe(
     "bytedance/seedance-2.5/text-to-video",
     {
@@ -27,8 +24,7 @@ try {
   );
 
   if (result.status !== "completed") {
-    console.error(`❌ Generation did not complete successfully`);
-    console.error(`   Status: ${result.status ?? "unknown"}`);
+    console.error(`Generation did not complete successfully (status: ${result.status ?? "unknown"}).`);
     process.exit(1);
   }
 
@@ -41,16 +37,13 @@ try {
         : "";
 
   if (!videoUrl) {
-    console.error("❌ Generation completed, but no video URL was returned.");
+    console.error("Generation completed, but no video URL was returned.");
     process.exit(1);
   }
 
-  console.log("✅ Success! Video URL:");
   console.log(videoUrl);
 } catch (error) {
-  console.error("❌ Request failed, was canceled, or was moderated.");
-  if (error instanceof Error) {
-    console.error(`   Details: ${error.message}`);
-  }
+  console.error("Seedance request failed, was canceled, or was moderated.");
+  if (error instanceof Error) console.error(error.message);
   process.exit(1);
 }
