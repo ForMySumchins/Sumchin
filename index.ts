@@ -1,15 +1,18 @@
-import "dotenv/config";
 import { config, higgsfield } from "@higgsfield/client/v2";
 
 const credentials = process.env.HF_CREDENTIALS;
 if (!credentials) {
-  console.error("HF_CREDENTIALS is not configured. Add it to .env.local locally; never commit it.");
+  console.error("\n--------------------------------------------------");
+  console.error("❌ [ERROR] HF_CREDENTIALS is not configured.");
+  console.error("   Add it to .env.local locally; never commit it.");
+  console.error("--------------------------------------------------\n");
   process.exit(1);
 }
 
 config({ credentials });
 
 try {
+  console.log("⏳ Starting video generation...");
   const result = await higgsfield.subscribe(
     "bytedance/seedance-2.5/text-to-video",
     {
@@ -24,7 +27,10 @@ try {
   );
 
   if (result.status !== "completed") {
-    console.error(`Generation did not complete successfully (status: ${result.status ?? "unknown"}).`);
+    console.error("\n--------------------------------------------------");
+    console.error(`❌ [ERROR] Generation did not complete successfully`);
+    console.error(`   Status: ${result.status ?? "unknown"}`);
+    console.error("--------------------------------------------------\n");
     process.exit(1);
   }
 
@@ -37,13 +43,18 @@ try {
         : "";
 
   if (!videoUrl) {
-    console.error("Generation completed, but no video URL was returned.");
+    console.error("\n--------------------------------------------------");
+    console.error("❌ [ERROR] Generation completed, but no video URL was returned.");
+    console.error("--------------------------------------------------\n");
     process.exit(1);
   }
 
+  console.log("✅ Video generation complete!");
   console.log(videoUrl);
 } catch (error) {
-  console.error("Seedance request failed, was canceled, or was moderated.");
-  if (error instanceof Error) console.error(error.message);
+  console.error("\n--------------------------------------------------");
+  console.error("❌ [ERROR] Seedance request failed, was canceled, or was moderated.");
+  if (error instanceof Error) console.error(`   Details: ${error.message}`);
+  console.error("--------------------------------------------------\n");
   process.exit(1);
 }
