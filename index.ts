@@ -3,13 +3,17 @@ import { config, higgsfield } from "@higgsfield/client/v2";
 
 const credentials = process.env.HF_CREDENTIALS;
 if (!credentials) {
-  console.error("HF_CREDENTIALS is not configured. Add it to .env.local locally; never commit it.");
+  console.error("\n❌ ERROR: HF_CREDENTIALS is not configured.");
+  console.error("💡 Action: Add it to .env.local locally; never commit it.\n");
   process.exit(1);
 }
 
 config({ credentials });
 
+console.log("⏳ Initializing Seedance 2.5 request...");
+
 try {
+  console.log("⏳ Subscribing to text-to-video generation...");
   const result = await higgsfield.subscribe(
     "bytedance/seedance-2.5/text-to-video",
     {
@@ -24,7 +28,8 @@ try {
   );
 
   if (result.status !== "completed") {
-    console.error(`Generation did not complete successfully (status: ${result.status ?? "unknown"}).`);
+    console.error(`\n❌ ERROR: Generation did not complete successfully.`);
+    console.error(`Status: ${result.status ?? "unknown"}\n`);
     process.exit(1);
   }
 
@@ -37,13 +42,13 @@ try {
         : "";
 
   if (!videoUrl) {
-    console.error("Generation completed, but no video URL was returned.");
+    console.error("\n❌ ERROR: Generation completed, but no video URL was returned.\n");
     process.exit(1);
   }
 
-  console.log(videoUrl);
+  console.log(`\n✅ Video generated successfully:\n🎥 ${videoUrl}\n`);
 } catch (error) {
-  console.error("Seedance request failed, was canceled, or was moderated.");
-  if (error instanceof Error) console.error(error.message);
+  console.error("\n❌ ERROR: Seedance request failed, was canceled, or was moderated.");
+  if (error instanceof Error) console.error(`Details: ${error.message}\n`);
   process.exit(1);
 }
