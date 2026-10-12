@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test": "tsx --test",
     "start": "tsx index.ts",
     "typecheck": "tsc --noEmit"
   },
