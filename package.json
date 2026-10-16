@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "tsx index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsx test-env-loading.test.ts"
   },
   "dependencies": {
     "@higgsfield/client": "latest",
